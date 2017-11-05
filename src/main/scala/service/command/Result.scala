@@ -10,6 +10,7 @@ sealed trait Result
 
 /**
   * Error class encapsulating errors during processing of a command or rules
+  *
   * @param uUID
   * @param code
   * @param title
@@ -19,6 +20,7 @@ sealed case class Error(uUID: UUID, code: String, title: String, detail: String)
 
 /**
   * Failure class encapsulating all the errors that occurred during processing
+  *
   * @param errors
   */
 case class Failure(errors: Seq[Error]) extends Result

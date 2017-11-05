@@ -1,7 +1,7 @@
 package model.command
 
 import service.command.{Command, Success}
-import technical.rule.RulesFactory
+import technical.rule.{DomainRulesFactory, TechnicalRulesFactory}
 
 case class MakeAPaymentCommand(paymentMode: String,
                                amount: Int,
@@ -10,11 +10,13 @@ case class MakeAPaymentCommand(paymentMode: String,
                                beneficiaryAccountNumber: String,
                                narratives: Seq[String]) extends Command {
   override def techincalValidationRules = Seq(
-    RulesFactory.isValidPaymentAmount(amount),
-    RulesFactory.isValidCurrency(currency)
+    TechnicalRulesFactory.isValidPaymentAmount(amount),
+    TechnicalRulesFactory.isValidCurrency(currency)
   )
 
-  override def domainValidationRules = Seq()
+  override def domainValidationRules = Seq(
+    DomainRulesFactory.isValidOriginatingAccount(originatingAccountNumber),
+    DomainRulesFactory.notSendingMoneyToSanctionedCountry(beneficiaryAccountNumber))
 
   override def domainProcessing = Success
 }
